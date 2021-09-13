@@ -1,0 +1,9 @@
+{
+	"name": "GkrisDF",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "6412e270-d1d1-421a-b48b-6cbbbd75128a",
+		"tenantId": "2373b9ab-1284-42d5-89cd-5d20eb6f15b1"
+	}
+}
