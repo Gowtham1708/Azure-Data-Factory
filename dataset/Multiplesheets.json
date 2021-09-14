@@ -1,0 +1,29 @@
+{
+	"name": "Multiplesheets",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BS",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"sheetname": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": {
+				"value": "@dataset().sheetname",
+				"type": "Expression"
+			},
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Class Marks.xlsx",
+				"container": "inputcontainer"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
