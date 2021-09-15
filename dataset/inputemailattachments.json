@@ -1,0 +1,103 @@
+{
+	"name": "inputemailattachments",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "email"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "action",
+				"type": "String"
+			},
+			{
+				"name": "criteria",
+				"type": "String"
+			},
+			{
+				"name": "device",
+				"type": "String"
+			},
+			{
+				"name": "gender",
+				"type": "String"
+			},
+			{
+				"name": "ageGroup",
+				"type": "String"
+			},
+			{
+				"name": "transactionTimeOfDay",
+				"type": "String"
+			},
+			{
+				"name": "metricsTimeOfDay",
+				"type": "String"
+			},
+			{
+				"name": "isReturnedPatient",
+				"type": "String"
+			},
+			{
+				"name": "createdDateTime",
+				"type": "String"
+			},
+			{
+				"name": "transactionDate",
+				"type": "String"
+			},
+			{
+				"name": "previousMetricsDate",
+				"type": "String"
+			},
+			{
+				"name": "metricsDate",
+				"type": "String"
+			},
+			{
+				"name": "location",
+				"type": "String"
+			},
+			{
+				"name": "userGroup",
+				"type": "String"
+			},
+			{
+				"name": "specialty",
+				"type": "String"
+			},
+			{
+				"name": "transactionStatus",
+				"type": "String"
+			},
+			{
+				"name": "paymentMethod",
+				"type": "String"
+			},
+			{
+				"name": "totalAmount",
+				"type": "String"
+			},
+			{
+				"name": "count",
+				"type": "String"
+			}
+		]
+	}
+}
