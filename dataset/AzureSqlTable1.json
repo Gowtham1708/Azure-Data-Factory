@@ -1,0 +1,107 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "varchar"
+			},
+			{
+				"name": "action",
+				"type": "varchar"
+			},
+			{
+				"name": "criteria",
+				"type": "varchar"
+			},
+			{
+				"name": "device",
+				"type": "varchar"
+			},
+			{
+				"name": "gender",
+				"type": "varchar"
+			},
+			{
+				"name": "ageGroup",
+				"type": "varchar"
+			},
+			{
+				"name": "transactionTimeOfDay",
+				"type": "varchar"
+			},
+			{
+				"name": "metricsTimeOfDay",
+				"type": "varchar"
+			},
+			{
+				"name": "isReturnedPatient",
+				"type": "varchar"
+			},
+			{
+				"name": "createdDateTime",
+				"type": "varchar"
+			},
+			{
+				"name": "transactionDate",
+				"type": "varchar"
+			},
+			{
+				"name": "previousMetricsDate",
+				"type": "varchar"
+			},
+			{
+				"name": "metricsDate",
+				"type": "varchar"
+			},
+			{
+				"name": "location",
+				"type": "varchar"
+			},
+			{
+				"name": "userGroup",
+				"type": "varchar"
+			},
+			{
+				"name": "specialty",
+				"type": "varchar"
+			},
+			{
+				"name": "transactionStatus",
+				"type": "varchar"
+			},
+			{
+				"name": "paymentMethod",
+				"type": "varchar"
+			},
+			{
+				"name": "totalAmount",
+				"type": "varchar"
+			},
+			{
+				"name": "count",
+				"type": "varchar"
+			},
+			{
+				"name": "Package name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Package Execution Time",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CA_PePMetricsData"
+		}
+	}
+}
