@@ -1,0 +1,32 @@
+{
+	"name": "Inserting data from email attachments to Azure SQL",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "emailattachments",
+						"type": "DatasetReference"
+					},
+					"name": "readingfilefromemailattachmentblob"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSQL",
+						"type": "DatasetReference"
+					},
+					"name": "insertintoAzureSQL"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DCPackagenamepackagexecutiondate"
+				}
+			],
+			"script": "source(output(\n\t\tid as string,\n\t\taction as string,\n\t\tcriteria as string,\n\t\tdevice as string,\n\t\tgender as string,\n\t\tageGroup as string,\n\t\ttransactionTimeOfDay as string,\n\t\tmetricsTimeOfDay as string,\n\t\tisReturnedPatient as string,\n\t\tcreatedDateTime as string,\n\t\ttransactionDate as string,\n\t\tpreviousMetricsDate as string,\n\t\tmetricsDate as string,\n\t\tlocation as string,\n\t\tuserGroup as string,\n\t\tspecialty as string,\n\t\ttransactionStatus as string,\n\t\tpaymentMethod as string,\n\t\ttotalAmount as string,\n\t\tcount as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> readingfilefromemailattachmentblob\nreadingfilefromemailattachmentblob derive({Package name} = \"email\",\n\t\t{Package Execution Time} = currentDate()) ~> DCPackagenamepackagexecutiondate\nDCPackagenamepackagexecutiondate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> insertintoAzureSQL"
+		}
+	}
+}
