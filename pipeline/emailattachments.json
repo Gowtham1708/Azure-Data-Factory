@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
+				"name": "Execute DF",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,11 +16,8 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow1",
-						"type": "DataFlowReference",
-						"parameters": {
-							"dfparam": "concat('metricReport_',toString(toDate(currentTimestamp()), 'yyyyMMdd'),'.csv')"
-						}
+						"referenceName": "Inserting data from email attachments to Azure SQL",
+						"type": "DataFlowReference"
 					},
 					"compute": {
 						"coreCount": 8,
