@@ -10,7 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "metricReport_20210914.csv",
+				"fileName": {
+					"value": "@concat('metricReport_',formatDateTime(utcnow(),'yyyyMMdd'),'.csv')",
+					"type": "Expression"
+				},
 				"container": "email"
 			},
 			"columnDelimiter": ",",
