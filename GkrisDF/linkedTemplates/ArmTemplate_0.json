@@ -10,6 +10,22 @@
 		"LS_BS_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_BS'"
+		},
+		"SqlServer1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServer1'"
+		},
+		"SqlServer2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServer2'"
+		},
+		"deletefiles_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'deletefiles'"
+		},
+		"linkedService1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'linkedService1'"
 		}
 	},
 	"variables": {
@@ -28,6 +44,79 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServer1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServer1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServer2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServer2_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/deletefiles')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('deletefiles_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/linkedService1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('linkedService1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSQL')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SqlServer2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "CA_PePMetricsData"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SqlServer2')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Multiplesheets')]",
@@ -97,6 +186,118 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/emailattachments')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_BS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@concat('metricReport_',formatDateTime(utcnow(),'yyyyMMdd'),'.csv')",
+							"type": "Expression"
+						},
+						"container": "email"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": "action",
+						"type": "String"
+					},
+					{
+						"name": "criteria",
+						"type": "String"
+					},
+					{
+						"name": "device",
+						"type": "String"
+					},
+					{
+						"name": "gender",
+						"type": "String"
+					},
+					{
+						"name": "ageGroup",
+						"type": "String"
+					},
+					{
+						"name": "transactionTimeOfDay",
+						"type": "String"
+					},
+					{
+						"name": "metricsTimeOfDay",
+						"type": "String"
+					},
+					{
+						"name": "isReturnedPatient",
+						"type": "String"
+					},
+					{
+						"name": "createdDateTime",
+						"type": "String"
+					},
+					{
+						"name": "transactionDate",
+						"type": "String"
+					},
+					{
+						"name": "previousMetricsDate",
+						"type": "String"
+					},
+					{
+						"name": "metricsDate",
+						"type": "String"
+					},
+					{
+						"name": "location",
+						"type": "String"
+					},
+					{
+						"name": "userGroup",
+						"type": "String"
+					},
+					{
+						"name": "specialty",
+						"type": "String"
+					},
+					{
+						"name": "transactionStatus",
+						"type": "String"
+					},
+					{
+						"name": "paymentMethod",
+						"type": "String"
+					},
+					{
+						"name": "totalAmount",
+						"type": "String"
+					},
+					{
+						"name": "count",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_BS')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/inputcsv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -133,6 +334,114 @@
 					},
 					{
 						"name": "country_label",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_BS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/inputemailattachments')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_BS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "email"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": "action",
+						"type": "String"
+					},
+					{
+						"name": "criteria",
+						"type": "String"
+					},
+					{
+						"name": "device",
+						"type": "String"
+					},
+					{
+						"name": "gender",
+						"type": "String"
+					},
+					{
+						"name": "ageGroup",
+						"type": "String"
+					},
+					{
+						"name": "transactionTimeOfDay",
+						"type": "String"
+					},
+					{
+						"name": "metricsTimeOfDay",
+						"type": "String"
+					},
+					{
+						"name": "isReturnedPatient",
+						"type": "String"
+					},
+					{
+						"name": "createdDateTime",
+						"type": "String"
+					},
+					{
+						"name": "transactionDate",
+						"type": "String"
+					},
+					{
+						"name": "previousMetricsDate",
+						"type": "String"
+					},
+					{
+						"name": "metricsDate",
+						"type": "String"
+					},
+					{
+						"name": "location",
+						"type": "String"
+					},
+					{
+						"name": "userGroup",
+						"type": "String"
+					},
+					{
+						"name": "specialty",
+						"type": "String"
+					},
+					{
+						"name": "transactionStatus",
+						"type": "String"
+					},
+					{
+						"name": "paymentMethod",
+						"type": "String"
+					},
+					{
+						"name": "totalAmount",
+						"type": "String"
+					},
+					{
+						"name": "count",
 						"type": "String"
 					}
 				]
@@ -547,6 +856,171 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Multiplesheets')]",
 				"[concat(variables('factoryId'), '/datasets/opmultisheetds')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Inserting data from email attachments to Azure SQL')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "emailattachments",
+								"type": "DatasetReference"
+							},
+							"name": "readingfilefromemailattachmentblob"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "AzureSQL",
+								"type": "DatasetReference"
+							},
+							"name": "insertintoAzureSQL"
+						}
+					],
+					"transformations": [
+						{
+							"name": "DCPackagenamepackagexecutiondate"
+						}
+					],
+					"script": "source(output(\n\t\tid as string,\n\t\taction as string,\n\t\tcriteria as string,\n\t\tdevice as string,\n\t\tgender as string,\n\t\tageGroup as string,\n\t\ttransactionTimeOfDay as string,\n\t\tmetricsTimeOfDay as string,\n\t\tisReturnedPatient as string,\n\t\tcreatedDateTime as string,\n\t\ttransactionDate as string,\n\t\tpreviousMetricsDate as string,\n\t\tmetricsDate as string,\n\t\tlocation as string,\n\t\tuserGroup as string,\n\t\tspecialty as string,\n\t\ttransactionStatus as string,\n\t\tpaymentMethod as string,\n\t\ttotalAmount as string,\n\t\tcount as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> readingfilefromemailattachmentblob\nreadingfilefromemailattachmentblob derive({Package name} = \"email\",\n\t\t{Package Execution Time} = currentDate()) ~> DCPackagenamepackagexecutiondate\nDCPackagenamepackagexecutiondate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> insertintoAzureSQL"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/emailattachments')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSQL')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/emailattachments')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Execute DF",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Inserting data from email attachments to Azure SQL",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"readingfilefromemailattachmentblob": {},
+									"insertintoAzureSQL": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "movingfilesafterprocessed",
+						"type": "Delete",
+						"dependsOn": [
+							{
+								"activity": "Execute DF",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "inputemailattachments",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"logStorageSettings": {
+								"linkedServiceName": {
+									"referenceName": "LS_BS",
+									"type": "LinkedServiceReference"
+								},
+								"path": "proccessedemailattachments"
+							},
+							"enableLogging": true,
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Inserting data from email attachments to Azure SQL')]",
+				"[concat(variables('factoryId'), '/datasets/inputemailattachments')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_BS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/automaticemailattachmenttrigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "emailattachments",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2021-09-15T07:21:00Z",
+						"timeZone": "UTC",
+						"schedule": {
+							"minutes": [
+								30
+							],
+							"hours": [
+								4
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/emailattachments')]"
 			]
 		}
 	]
