@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "Inserting data from email attachments to Azure SQL",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -9,7 +9,7 @@
 						"referenceName": "emailattachments",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "readingfilefromemailattachmentblob"
 				}
 			],
 			"sinks": [
@@ -18,15 +18,15 @@
 						"referenceName": "AzureSQL",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "insertintoAzureSQL"
 				}
 			],
 			"transformations": [
 				{
-					"name": "DerivedColumn1"
+					"name": "DCPackagenamepackagexecutiondate"
 				}
 			],
-			"script": "parameters{\n\tdfparam as string (concat('metricReport_',toString(toDate(currentTimestamp()), 'yyyyMMdd'),'.csv'))\n}\nsource(output(\n\t\tid as string,\n\t\taction as string,\n\t\tcriteria as string,\n\t\tdevice as string,\n\t\tgender as string,\n\t\tageGroup as string,\n\t\ttransactionTimeOfDay as string,\n\t\tmetricsTimeOfDay as string,\n\t\tisReturnedPatient as string,\n\t\tcreatedDateTime as string,\n\t\ttransactionDate as string,\n\t\tpreviousMetricsDate as string,\n\t\tmetricsDate as string,\n\t\tlocation as string,\n\t\tuserGroup as string,\n\t\tspecialty as string,\n\t\ttransactionStatus as string,\n\t\tpaymentMethod as string,\n\t\ttotalAmount as string,\n\t\tcount as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 derive({Package name} = \"email\",\n\t\t{Package Execution Time} = currentDate()) ~> DerivedColumn1\nDerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+			"script": "source(output(\n\t\tid as string,\n\t\taction as string,\n\t\tcriteria as string,\n\t\tdevice as string,\n\t\tgender as string,\n\t\tageGroup as string,\n\t\ttransactionTimeOfDay as string,\n\t\tmetricsTimeOfDay as string,\n\t\tisReturnedPatient as string,\n\t\tcreatedDateTime as string,\n\t\ttransactionDate as string,\n\t\tpreviousMetricsDate as string,\n\t\tmetricsDate as string,\n\t\tlocation as string,\n\t\tuserGroup as string,\n\t\tspecialty as string,\n\t\ttransactionStatus as string,\n\t\tpaymentMethod as string,\n\t\ttotalAmount as string,\n\t\tcount as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> readingfilefromemailattachmentblob\nreadingfilefromemailattachmentblob derive({Package name} = \"email\",\n\t\t{Package Execution Time} = currentDate()) ~> DCPackagenamepackagexecutiondate\nDCPackagenamepackagexecutiondate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> insertintoAzureSQL"
 		}
 	}
 }
