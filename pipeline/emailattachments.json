@@ -19,10 +19,7 @@
 						"referenceName": "dataflow1",
 						"type": "DataFlowReference",
 						"parameters": {
-							"dfparam": {
-								"value": "'@{concat('metricReport_',formatDateTime(utcnow(),'yyyyMMdd'))}'",
-								"type": "Expression"
-							}
+							"dfparam": "concat('metricReport_',toString(toDate(currentTimestamp()), 'yyyyMMdd'),'.csv')"
 						}
 					},
 					"compute": {
