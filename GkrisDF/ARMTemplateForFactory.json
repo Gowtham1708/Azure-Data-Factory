@@ -30,6 +30,10 @@
 		"linkedService1_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'linkedService1'"
+		},
+		"storagetrigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/79ff6360-d376-4827-b8ac-6b653525f642/resourceGroups/GkrisRG/providers/Microsoft.Storage/storageAccounts/gkrissablob"
 		}
 	},
 	"variables": {
@@ -1359,16 +1363,8 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "emailattachments",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
+				"runtimeState": "Stopped",
+				"pipelines": [],
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
@@ -1385,6 +1381,34 @@
 							]
 						}
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/storagetrigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "emailattachments",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/email/blobs/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('storagetrigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
 				}
 			},
 			"dependsOn": [

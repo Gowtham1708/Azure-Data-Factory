@@ -31,6 +31,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'linkedService1'"
 		},
+		"storagetrigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/79ff6360-d376-4827-b8ac-6b653525f642/resourceGroups/GkrisRG/providers/Microsoft.Storage/storageAccounts/gkrissablob"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -93,6 +97,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"storagetrigger_properties_typeProperties_scope": {
+						"value": "[parameters('storagetrigger_properties_typeProperties_scope')]"
 					}
 				}
 			},

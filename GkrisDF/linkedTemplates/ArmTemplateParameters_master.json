@@ -23,6 +23,9 @@
 		"linkedService1_connectionString": {
 			"value": ""
 		},
+		"storagetrigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/79ff6360-d376-4827-b8ac-6b653525f642/resourceGroups/GkrisRG/providers/Microsoft.Storage/storageAccounts/gkrissablob"
+		},
 		"containerUri": {
 			"value": ""
 		},
