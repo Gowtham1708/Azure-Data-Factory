@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Execute DF",
+				"name": "Execute Dataflow",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -31,7 +31,7 @@
 				"type": "Delete",
 				"dependsOn": [
 					{
-						"activity": "Execute DF",
+						"activity": "Execute Dataflow",
 						"dependencyConditions": [
 							"Succeeded"
 						]
