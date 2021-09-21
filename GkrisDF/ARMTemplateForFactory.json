@@ -391,7 +391,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Execute DF",
+						"name": "Execute Dataflow",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -425,7 +425,7 @@
 						"type": "Delete",
 						"dependsOn": [
 							{
-								"activity": "Execute DF",
+								"activity": "Execute Dataflow",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -1391,7 +1391,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {

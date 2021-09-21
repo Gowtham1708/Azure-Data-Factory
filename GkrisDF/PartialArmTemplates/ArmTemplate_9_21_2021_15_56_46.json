@@ -6,10 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "GkrisDF"
-		},
-		"storagetrigger_properties_typeProperties_scope": {
-			"type": "string",
-			"defaultValue": "/subscriptions/79ff6360-d376-4827-b8ac-6b653525f642/resourceGroups/GkrisRG/providers/Microsoft.Storage/storageAccounts/gkrissablob"
 		}
 	},
 	"variables": {
@@ -37,14 +33,8 @@
 						"typeProperties": {
 							"dataflow": {
 								"referenceName": "Inserting data from email attachments to Azure SQL",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"readingfilefromemailattachmentblob": {},
-									"insertintoAzureSQL": {}
-								}
+								"type": "DataFlowReference"
 							},
-							"staging": {},
 							"compute": {
 								"coreCount": 8,
 								"computeType": "General"
@@ -74,8 +64,7 @@
 						"typeProperties": {
 							"dataset": {
 								"referenceName": "inputemailattachments",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							},
 							"logStorageSettings": {
 								"linkedServiceName": {
@@ -93,43 +82,9 @@
 						}
 					}
 				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
 				"annotations": []
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/storagetrigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "emailattachments",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/email/blobs/",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('storagetrigger_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/emailattachments')]"
-			]
 		}
 	]
 }
